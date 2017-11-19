@@ -36,33 +36,39 @@ server.on('listening', onListening);
 console.log("Server start at : " + port);
 
 
-// const electron = require('electron')
-// const elecapp = electron.app
-// const BrowserWindow = electron.BrowserWindow
-// var mainWindow
-// function createWindow () {
-//   // Create the browser window.
-//   mainWindow = new BrowserWindow(
-//   {
-//     icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
-//     webPreferences: {
-//       nodeIntegration: false   
-//     }
-//   })
-//   mainWindow.setFullScreen(true)
-//   mainWindow.loadURL('http://localhost:3000/')
-//   // mainWindow.loadURL(url.format({
-//   //   pathname: path.join(appRoot, 'public/index.html'),
-//   //   protocol: 'file:',
-//   //   slashes: true
-//   // }))
+//handle setupevents as quickly as possible
+const setupEvents = require('../installers/setupEvents')
+if (setupEvents.handleSquirrelEvent()) {
+  // squirrel event handled and app will exit in 1000ms, so don't do anything else
+  return;
+}
+const electron = require('electron')
+const elecapp = electron.app
+const BrowserWindow = electron.BrowserWindow
+var mainWindow
+function createWindow () {
+  // Create the browser window.
+  mainWindow = new BrowserWindow(
+  {
+    icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+    webPreferences: {
+      nodeIntegration: false   
+    }
+  })
+  mainWindow.setFullScreen(true)
+  mainWindow.loadURL('http://localhost:3000/')
+  // mainWindow.loadURL(url.format({
+  //   pathname: path.join(appRoot, 'public/index.html'),
+  //   protocol: 'file:',
+  //   slashes: true
+  // }))
 
-//   mainWindow.on('closed', function () {
-//     mainWindow = null
-//     elecapp.quit()
-//   })
-// }
-// elecapp.on('ready', createWindow)
+  mainWindow.on('closed', function () {
+    mainWindow = null
+    elecapp.quit()
+  })
+}
+elecapp.on('ready', createWindow)
 
 /**
  * Normalize a port into a number, string, or false.
